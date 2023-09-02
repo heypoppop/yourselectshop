@@ -1,6 +1,0 @@
-package com.sparta.myselectshop.repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface FolderRepositroy extends JpaRepository<FolderRepositroy, Long> {
-}

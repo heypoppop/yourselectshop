@@ -48,13 +48,12 @@ public class ProductService {
         return new ProductResponseDto(product);
     }
 
+    @Transactional(readOnly = true)
     public Page<ProductResponseDto> getProducts(User user, int page, int size, String sortBy, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
-
         UserRoleEnum userRoleEnum = user.getRole();
-
         Page<Product> productList;
 
         if (userRoleEnum == UserRoleEnum.ADMIN) {
@@ -62,8 +61,6 @@ public class ProductService {
         } else {
             productList = productRepository.findAllByUser(user, pageable);
         }
-
-
         return productList.map(ProductResponseDto::new);
     }
 
