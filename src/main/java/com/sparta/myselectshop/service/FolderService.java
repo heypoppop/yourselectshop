@@ -16,7 +16,6 @@ public class FolderService {
 
     private final FolderRepository folderRepository;
 
-
     public void addFolders(List<String> folderNames, User user) {
 
         List<Folder> existFolderList = folderRepository.findAllByUserAndNameIn(user, folderNames);
@@ -25,29 +24,28 @@ public class FolderService {
 
         for (String folderName : folderNames) {
             if (!isExistFolderName(folderName, existFolderList)) {
-                // 폴더가 존재하지 않는 경우
                 Folder folder = new Folder(folderName, user);
                 folderList.add(folder);
             } else {
-                // 폴더가 존재하는 경우
                 throw new IllegalArgumentException("이미 존재하는 폴더명입니다.");
             }
         }
 
         folderRepository.saveAll(folderList);
-
     }
 
     public List<FolderResponseDto> getFolders(User user) {
         List<Folder> folderList = folderRepository.findAllByUser(user);
         List<FolderResponseDto> folderResponseDtoList = new ArrayList<>();
+
         for (Folder folder : folderList) {
             folderResponseDtoList.add(new FolderResponseDto(folder));
+
         }
         return folderResponseDtoList;
     }
 
-    // 폴더가 존재하는지 확인하는 메소드
+
     private boolean isExistFolderName(String folderName, List<Folder> existFolderList) {
         for (Folder existFolder : existFolderList) {
             if (folderName.equals(existFolder.getName())) {
